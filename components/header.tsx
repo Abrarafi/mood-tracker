@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./theme-toggle";
-import { useAuth } from "@/lib/contexts/auth-context";
+import { useAuth } from "@/components/lib/contexts/auth-context";
 import { LoginModal } from "@/components/auth/login-modal";
 import { SignInButton } from "@/components/auth/sign-in-button";
 
