@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./theme-toggle";
-import { useAuth } from "@/components/lib/contexts/auth-context";
+import { useAuth } from "@/lib/contexts/auth-context";
 import { LoginModal } from "@/components/auth/login-modal";
 import { SignInButton } from "@/components/auth/sign-in-button";
 
@@ -35,9 +35,9 @@ export function Header() {
             href="/"
             className="flex items-center space-x-2 transition-opacity hover:opacity-80"
           >
-            <AudioWaveform className="h-7 w-7 text-primary animate-pulse-gentle" />
+            <AudioWaveform className="h-7 w-7 text-purple-600 animate-pulse-gentle" />
             <div className="flex flex-col">
-              <span className="font-semibold text-lg bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+              <span className="font-semibold text-lg bg-gradient-to-r from-purple-600 to-purple-400 bg-clip-text text-transparent">
                 Aura3.0
               </span>
               <span className="text-xs dark:text-muted-foreground">
