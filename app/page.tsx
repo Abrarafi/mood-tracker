@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/dialog";
 import React from "react";
 import { Ripple } from "@/components/ui/ripple";
+import { useAuth } from "@/lib/contexts/auth-context";
 
 export default function Home() {
   const emotions = [
@@ -44,6 +45,7 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+ const { isAuthenticated, setShowLoginModal } = useAuth();
 
   const welcomeSteps = [
     {
@@ -69,6 +71,19 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+
+  const handleLetsBegin = () => {
+    if (!isAuthenticated) {
+      setShowLoginModal(true);
+      return;
+    }
+    
+    // If authenticated, proceed with the original logic
+    setShowDialog(false);
+    setCurrentStep(0);
+    // Here you would navigate to the chat interface
+  };
 
   const currentEmotion =
     emotions.find((em) => Math.abs(emotion - em.value) < 15) || emotions[2];
@@ -334,6 +349,7 @@ export default function Home() {
                 if (currentStep < welcomeSteps.length - 1) {
                   setCurrentStep((c) => c + 1);
                 } else {
+                  handleLetsBegin();
                   setShowDialog(false);
                   setCurrentStep(0);
                   // Here you would navigate to the chat interface
