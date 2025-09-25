@@ -3,6 +3,7 @@
 import { PrivyProvider } from "@privy-io/react-auth";
 import { AuthProvider } from "@/lib/contexts/auth-context";
 import { ThemeProvider } from "@/components/theme-provider";
+import { SessionProvider } from "@/lib/contexts/session-context";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -17,16 +18,19 @@ export function Providers({ children }: { children: React.ReactNode }) {
     //     },
     //   }}
     // >
-      <AuthProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
-      </AuthProvider>
+    <SessionProvider>
+    <AuthProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        {children}
+      </ThemeProvider>
+    </AuthProvider>
+    </SessionProvider>
     // </PrivyProvider>
   );
 }
+  
