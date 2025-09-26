@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Brain, Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/contexts/auth-context";
+import { useRouter } from "next/navigation";
 
 export function LoginModal() {
   const {
@@ -26,6 +27,7 @@ export function LoginModal() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     if (!showLoginModal) {
@@ -35,11 +37,12 @@ export function LoginModal() {
   }, [showLoginModal]);
 
   const handleSubmit = async () => {
+    setShowLoginModal(false);
     if (showUserForm) {
       if (!name.trim() || !email.trim()) return;
       await updateUser({ name, email });
     } else {
-      await login();
+      router.push("/login");
     }
   };
 
