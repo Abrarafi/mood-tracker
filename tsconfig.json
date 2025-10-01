@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "backend/models/Activity.js", "backend/models/chat.js", "backend/models/ChatSession.js", "backend/models/Mood.js", "backend/models/Session.js", "backend/models/User.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "backend/models/Activity.js", "backend/models/chat.js", "backend/models/ChatSession.js", "backend/models/Mood.js", "backend/models/Session.js", "backend/models/user.model.js", "backend/config/logger.js", "backend/inngest/aiFunctions.js", "backend/inngest/client.js", "backend/inngest/functions.js"],
   "exclude": ["node_modules"]
 }

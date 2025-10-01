@@ -3,14 +3,24 @@ require("dotenv").config();
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
+    const uri = process.env.MONGODB_URI;
+    if (!uri) {
+      console.warn(
+        "MONGODB_URI not set; starting server without a database connection"
+      );
+      return;
+    }
+    await mongoose.connect(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
     console.log("MongoDB Connected");
   } catch (err) {
     console.error("Database connection error:", err.message);
-    process.exit(1);
+    // Don't crash in dev environments without DB; allow server to start
+    if (process.env.NODE_ENV === "production") {
+      process.exit(1);
+    }
   }
 };
 
