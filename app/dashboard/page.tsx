@@ -353,9 +353,9 @@ const SearchParamsComponent = ({
 };
 
 export default function Dashboard() {
-  // const { isLoading, user, isAuthenticated } = useAuth();
-  const { isLoading, user} = useAuth(); // --- IGNORE ---
-  const isAuthenticated = true; // --- IGNORE ---
+  const { isLoading, user, isAuthenticated } = useAuth();
+  // const { isLoading, user} = useAuth(); // --- IGNORE ---
+  // const isAuthenticated = true; // --- IGNORE ---
   const [mounted, setMounted] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const router = useRouter();

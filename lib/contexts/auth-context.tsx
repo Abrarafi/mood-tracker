@@ -50,8 +50,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Update the authentication effect
   useEffect(() => {
     let isSubscribed = true; // Add cleanup flag
+
     const handleAuthChange = async () => {
-      
       // Skip if already loading or no change in auth state
       if (!isSubscribed || !privyUser?.wallet?.address) return;
 
@@ -81,7 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           } else if (response.status === 404) {
             setState((s) => ({
               ...s,
-              isAuthenticated: true,
+              isAuthenticated: false,
               user: { walletAddress },
               showUserForm: true,
               showLoginModal: true,
@@ -96,7 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else if (!authenticated) {
         setState((s) => ({
           ...s,
-          isAuthenticated: true,
+          isAuthenticated: false,
           user: null,
           isLoading: false,
         }));
@@ -127,7 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await privyLogout();
       setState((s) => ({
         ...s,
-        isAuthenticated: true,
+        isAuthenticated: false,
         user: null,
         showLoginModal: false,
         showUserForm: false,

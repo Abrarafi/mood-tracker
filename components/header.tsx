@@ -19,11 +19,11 @@ import { SignInButton } from "@/components/auth/sign-in-button";
 import { usePathname } from "next/navigation";
 
 export function Header() {
-  // const { isAuthenticated, user, logout } = useAuth();
+   const { isAuthenticated, user, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-  const isAuthenticated = true; // --- IGNORE ---
-  const { logout } = useAuth(); // --- IGNORE ---
+  // const isAuthenticated = true; // --- IGNORE ---
+  // const { logout } = useAuth(); // --- IGNORE ---
 
   const navItems = [
     { href: "/features", label: "Features" },
