@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const authRouter = require("./routes/auth.routes");
+const chatRouter = require("./routes/chat.routes");
 let logger;
 try {
   logger = require("./config/logger");
@@ -30,6 +31,7 @@ app.get("/health", (req, res) => {
 
 // API routes
 app.use("/auth", authRouter);
+app.use("/chat", chatRouter);
 
 // Basic error handler
 app.use((err, req, res, next) => {
