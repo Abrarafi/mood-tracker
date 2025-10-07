@@ -31,6 +31,7 @@ import {
 import React from "react";
 import { Ripple } from "@/components/ui/ripple";
 import { useAuth } from "@/lib/contexts/auth-context";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const emotions = [
@@ -46,6 +47,7 @@ export default function Home() {
   const [showDialog, setShowDialog] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const { isAuthenticated, setShowLoginModal } = useAuth();
+  const router = useRouter();
   // const { setShowLoginModal} = useAuth(); // --- IGNORE ---
   // const isAuthenticated = true; // --- IGNORE ---
 
@@ -85,6 +87,7 @@ export default function Home() {
     setShowDialog(false);
     setCurrentStep(0);
     // Here you would navigate to the chat interface
+    router.push("/dashboard");
   };
 
   const currentEmotion =

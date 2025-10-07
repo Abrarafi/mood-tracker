@@ -190,14 +190,15 @@ export default function NFTsPage() {
         text,
         url: window.location.href,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error sharing:", error);
     }
   };
 
   useEffect(() => {
     const loadNFTs = async () => {
-      if (!isAuthenticated || !user?.walletAddress) return;
+      // wallet not required; disable NFT loading if no wallet integration
+      return;
 
       try {
         setError(null);
@@ -258,7 +259,7 @@ export default function NFTsPage() {
                 );
               }
             }
-          } catch (error) {
+          } catch (error: any) {
             console.error("Network switching error:", error);
             throw new Error(
               error instanceof Error
@@ -271,24 +272,22 @@ export default function NFTsPage() {
           provider = new ethers.BrowserProvider(window.ethereum);
         }
 
-        console.log("Loading NFTs for wallet:", user.walletAddress);
+        // console.log("Loading NFTs for wallet:", user.walletAddress);
 
         // Get user's NFTs
-        const userSessions = await getUserSessions(
-          provider,
-          user.walletAddress
-        );
+        // const userSessions = await getUserSessions(provider, user.walletAddress);
 
         // Map the sessions to our Token interface
-        const mappedSessions = userSessions.map((session) => ({
+        const mappedSessions =
+          [] as Token[]; /* userSessions.map((session) => ({
           id: session.sessionId,
           sessionId: session.sessionId,
           imageUri: session.imageUri,
           metadata: session.metadata,
-        }));
+        }))*/
 
         setSessions(mappedSessions);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error loading NFTs:", error);
         setError(
           error instanceof Error
@@ -301,7 +300,7 @@ export default function NFTsPage() {
     };
 
     loadNFTs();
-  }, [isAuthenticated, user?.walletAddress]);
+  }, [isAuthenticated]);
 
   if (isLoading || isLoadingNFTs) {
     return (

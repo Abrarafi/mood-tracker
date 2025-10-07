@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/lib/context/auth-context";
+import { useAuth } from "@/lib/contexts/auth-context";
 import { useToast } from "@/hooks/use-toast";
 
 export function BookSession() {
@@ -20,7 +20,7 @@ export function BookSession() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          walletId: user?.wallet,
+          // wallet removed; use server-managed payment or omit
           amount: "0.01", // 0.01 ETH for session
           toAddress: "0x...", // Your therapy service wallet
         }),
