@@ -503,15 +503,15 @@ export default function Dashboard() {
 
   // Modify the loadActivities function to update activityHistory
   const loadActivities = useCallback(async () => {
-    if (!user?.id) return;
+    if (!user?._id) return;
     try {
-      const userActivities = await getUserActivities(user.id);
+      const userActivities = await getUserActivities(user._id);
       setActivities(userActivities);
       setActivityHistory(transformActivitiesToDayActivity(userActivities));
     } catch (error) {
       console.error("Error loading activities:", error);
     }
-  }, [user?.id]);
+  }, [user?._id]);
 
   useEffect(() => {
     setMounted(true);
@@ -639,7 +639,7 @@ export default function Dashboard() {
     setIsSavingMood(true);
     try {
       await saveMoodData({
-        userId: user?.id as string,
+        userId: user?._id as string,
         mood: data.moodScore,
         note: "",
       });
@@ -693,19 +693,19 @@ export default function Dashboard() {
 
   // Load activities on mount and after new ones are logged
   useEffect(() => {
-    if (user?.id) {
+    if (user?._id) {
       loadActivities();
     }
-  }, [user?.id, loadActivities]);
+  }, [user?._id, loadActivities]);
 
   // Add this handler for game activities
   const handleGamePlayed = useCallback(
     async (gameName: string, description: string) => {
-      if (!user?.id) return;
+      if (!user?._id) return;
 
       try {
         await logActivity({
-          userId: user.id,
+          userId: user._id,
           type: "game",
           name: gameName,
           description: description,
@@ -721,7 +721,7 @@ export default function Dashboard() {
         console.error("Error logging game activity:", error);
       }
     },
-    [user?.id, loadActivities]
+    [user?._id, loadActivities]
   );
 
   // Add handler for search params
@@ -777,7 +777,7 @@ export default function Dashboard() {
             className="space-y-2"
           >
             <h1 className="text-3xl font-bold text-foreground">
-              Welcome back, {user?.name || "there"}
+              Welcome back, {user?.username || "there"}
             </h1>
             <p className="text-muted-foreground">
               {currentTime.toLocaleDateString("en-US", {

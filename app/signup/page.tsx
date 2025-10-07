@@ -8,10 +8,11 @@ import { Container } from "@/components/ui/container";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Mail, User, Lock } from "lucide-react";
-import { registerUser } from "@/lib/api/auth";
+import { useAuth } from "@/lib/contexts/auth-context";
 
 export default function SignupPage() {
   const router = useRouter();
+  const { register } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +29,8 @@ export default function SignupPage() {
     }
     setLoading(true);
     try {
-      await registerUser(name, email, password);
+      // Backend expects { username, email, password }
+      await register({ username: name, email, password });
       router.push("/login");
     } catch (err: any) {
       setError(err.message || "Signup failed. Please try again.");
