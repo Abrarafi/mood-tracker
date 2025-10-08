@@ -578,6 +578,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (activities.length > 0) {
       setTodayStats(calculateDailyStats(activities));
+      setAiInsights(generateAIInsights(activities));
     }
   }, [activities]);
 
@@ -589,7 +590,18 @@ export default function Dashboard() {
       icon: Brain,
       color: "text-purple-500",
       bgColor: "bg-purple-500/10",
-      description: "Today's average mood",
+      description: todayStats.moodScore
+        ? `Today's average mood (${
+            activities.filter(
+              (a) =>
+                a.type === "mood" &&
+                isWithinInterval(new Date(a.timestamp), {
+                  start: startOfDay(new Date()),
+                  end: addDays(startOfDay(new Date()), 1),
+                })
+            ).length
+          } entries)`
+        : "Log your mood to see insights",
     },
     {
       title: "Completion Rate",
@@ -637,15 +649,29 @@ export default function Dashboard() {
     router.push("/therapy/new");
   };
 
-  const handleMoodSubmit = async (data: { moodScore: number }) => {
+  const handleMoodSubmit = async (data: {
+    moodScore: number;
+    note?: string;
+  }) => {
     setIsSavingMood(true);
     try {
-      // Save to backend via API (cookies used for auth)
+      // Save mood to mood API
       const { saveMood } = await import("@/lib/api/mood");
-      await saveMood(data.moodScore, "");
+      await saveMood(data.moodScore, data.note || "");
+
+      // Also log as activity for tracking
+      await logActivity({
+        type: "mood",
+        name: "Mood Check-in",
+        description: data.note || "",
+        completed: true,
+        moodScore: data.moodScore,
+        moodNote: data.note || "",
+      });
+
       setShowMoodModal(false);
-      // Optionally refresh activities/history if you visualize mood entries
-      // await loadActivities();
+      // Refresh activities to update mood display
+      await loadActivities();
     } catch (error) {
       console.error("Error saving mood:", error);
     } finally {

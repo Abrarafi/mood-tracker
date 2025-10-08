@@ -3,15 +3,18 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 
 interface MoodFormProps {
-  onSubmit: (data: { moodScore: number }) => Promise<void>;
+  onSubmit: (data: { moodScore: number; note?: string }) => Promise<void>;
   isLoading?: boolean;
 }
 
 export function MoodForm({ onSubmit, isLoading }: MoodFormProps) {
   const [moodScore, setMoodScore] = useState(50);
+  const [note, setNote] = useState("");
 
   const emotions = [
     { value: 0, label: "😔", description: "Very Low" },
@@ -62,10 +65,22 @@ export function MoodForm({ onSubmit, isLoading }: MoodFormProps) {
         />
       </div>
 
+      {/* Note field */}
+      <div className="space-y-2">
+        <Label htmlFor="mood-note">How are you feeling? (optional)</Label>
+        <Textarea
+          id="mood-note"
+          placeholder="Share what's on your mind..."
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          className="min-h-[80px] resize-none"
+        />
+      </div>
+
       {/* Submit button */}
       <Button
         className="w-full"
-        onClick={() => onSubmit({ moodScore })}
+        onClick={() => onSubmit({ moodScore, note: note.trim() || undefined })}
         disabled={isLoading}
       >
         {isLoading ? (
