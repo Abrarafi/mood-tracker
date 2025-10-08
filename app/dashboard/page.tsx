@@ -638,12 +638,12 @@ export default function Dashboard() {
   const handleMoodSubmit = async (data: { moodScore: number }) => {
     setIsSavingMood(true);
     try {
-      await saveMoodData({
-        userId: user?._id as string,
-        mood: data.moodScore,
-        note: "",
-      });
+      // Save to backend via API (cookies used for auth)
+      const { saveMood } = await import("@/lib/api/mood");
+      await saveMood(data.moodScore, "");
       setShowMoodModal(false);
+      // Optionally refresh activities/history if you visualize mood entries
+      // await loadActivities();
     } catch (error) {
       console.error("Error saving mood:", error);
     } finally {

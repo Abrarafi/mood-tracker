@@ -83,3 +83,5 @@
 {"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T16:19:17.401Z"}
 {"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T16:19:25.344Z"}
 {"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T16:21:55.861Z"}
+{"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T16:37:34.702Z"}
+{"level":"info","message":"Mood entry created for user 68e3bc899cf98e0b117da748","timestamp":"2025-10-08T17:03:18.646Z"}
