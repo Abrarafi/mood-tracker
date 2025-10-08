@@ -8,6 +8,7 @@ const connectDB = require("./config/db");
 const authRouter = require("./routes/auth.routes");
 const chatRouter = require("./routes/chat.routes");
 const moodRouter = require("./routes/mood.routes");
+const activityRouter = require("./routes/activity.routes");
 let logger;
 try {
   logger = require("./config/logger");
@@ -34,6 +35,7 @@ app.get("/health", (req, res) => {
 app.use("/auth", authRouter);
 app.use("/chat", chatRouter);
 app.use("/api/mood", moodRouter);
+app.use("/api/activity", activityRouter);
 
 // Basic error handler
 app.use((err, req, res, next) => {

@@ -52,11 +52,11 @@ export function ActivityLogger({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user?.id || !type || !name) return;
+    if (!user?._id || !type || !name) return;
     setIsLoading(true);
     try {
       await createActivity({
-        userId: user.id,
+        userId: user._id,
         type,
         name,
         description,
