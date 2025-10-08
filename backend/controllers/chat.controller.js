@@ -11,7 +11,7 @@ const genAI = new GoogleGenerativeAI(
   process.env.GEMINI_API_KEY || "AIzaSyBc1ZPX7gsgt1NizYIPJ5QcuuHGBC5wq3Q"
 );
 
-// Create a new chat session
+// Create a new chat session (only when first message is sent)
 const createChatSession = async (req, res) => {
   try {
     if (!req.user || !req.user.id) {
@@ -29,19 +29,11 @@ const createChatSession = async (req, res) => {
 
     const sessionId = uuidv4();
 
-    const session = new ChatSession({
-      sessionId,
-      userId,
-      startTime: new Date(),
-      status: "active",
-      messages: [],
-    });
-
-    await session.save();
-
+    // Don't save to database yet - only return sessionId
+    // Session will be created when first message is sent
     res.status(201).json({
-      message: "Chat session created successfully",
-      sessionId: session.sessionId,
+      message: "Chat session ID generated successfully",
+      sessionId: sessionId,
     });
   } catch (error) {
     logger.error("Error creating chat session:", error);
@@ -61,15 +53,23 @@ const sendMessage = async (req, res) => {
     // https://cursor.com/loginDeepControl?challenge=hdqZqJ2MSKFXpu7BeNjLjqynpika3oLTan3K7nnElkA&uuid=8f8c1371-af7f-4ebe-aaa1-c022ec3c933e&mode=login
     logger.info("Processing message:", { sessionId, message });
 
-    const session = await ChatSession.findOne({ sessionId });
-    if (!session) {
-      logger.warn("Session not found:", { sessionId });
-      return res.status(404).json({ message: "Session not found" });
-    }
+    let session = await ChatSession.findOne({ sessionId });
 
-    if (session.userId.toString() !== userId.toString()) {
-      logger.warn("Unauthorized access attempt:", { sessionId, userId });
-      return res.status(403).json({ message: "Unauthorized" });
+    // If session doesn't exist, create it (first message)
+    if (!session) {
+      session = new ChatSession({
+        sessionId,
+        userId,
+        startTime: new Date(),
+        status: "active",
+        messages: [],
+      });
+    } else {
+      // Check authorization for existing session
+      if (session.userId.toString() !== userId.toString()) {
+        logger.warn("Unauthorized access attempt:", { sessionId, userId });
+        return res.status(403).json({ message: "Unauthorized" });
+      }
     }
 
     const event = {
@@ -256,10 +256,53 @@ const getChatHistory = async (req, res) => {
   }
 };
 
+// Get all chat sessions for a user
+const getAllChatSessions = async (req, res) => {
+  try {
+    const userId = new Types.ObjectId(req.user.id);
+
+    const sessions = await ChatSession.find({ userId })
+      .sort({ startTime: -1 })
+      .select("sessionId startTime status messages")
+      .exec();
+
+    res.json(sessions);
+  } catch (error) {
+    logger.error("Error fetching all chat sessions:", error);
+    res.status(500).json({ message: "Error fetching chat sessions" });
+  }
+};
+
+// Delete a chat session
+const deleteChatSession = async (req, res) => {
+  try {
+    const { sessionId } = req.params;
+    const userId = new Types.ObjectId(req.user.id);
+
+    const session = await ChatSession.findOne({ sessionId });
+    if (!session) {
+      return res.status(404).json({ message: "Session not found" });
+    }
+
+    if (session.userId.toString() !== userId.toString()) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    await ChatSession.deleteOne({ sessionId });
+
+    res.json({ message: "Session deleted successfully" });
+  } catch (error) {
+    logger.error("Error deleting chat session:", error);
+    res.status(500).json({ message: "Error deleting chat session" });
+  }
+};
+
 module.exports = {
   createChatSession,
   sendMessage,
   getSessionHistory,
   getChatSession,
   getChatHistory,
+  getAllChatSessions,
+  deleteChatSession,
 };

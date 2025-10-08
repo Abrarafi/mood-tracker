@@ -2,3 +2,26 @@
 {"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T00:12:15.132Z"}
 {"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T00:12:39.304Z"}
 {"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T00:13:23.130Z"}
+{"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T00:17:50.544Z"}
+{"level":"info","message":"Processing message: hi","sessionId":"14d4f3a2-ddef-4216-95f1-75b7e404b292","timestamp":"2025-10-08T00:24:28.606Z"}
+{"emotionalState":"Neutral","level":"info","message":"Message analysis:","progressIndicators":[],"recommendedApproach":"Acknowledge the greeting and initiate a conversational approach to understand the client's needs or reason for contacting therapy.","riskLevel":0,"themes":[],"timestamp":"2025-10-08T00:24:30.768Z"}
+{"level":"info","message":"Generated response:","timestamp":"2025-10-08T00:24:31.879Z"}
+{"level":"info","message":"Session updated successfully:","sessionId":"14d4f3a2-ddef-4216-95f1-75b7e404b292","timestamp":"2025-10-08T00:24:31.982Z"}
+{"level":"info","message":"Processing message: hi there","sessionId":"fb596987-00fa-4ef8-aab4-91e5e8082304","timestamp":"2025-10-08T00:25:42.579Z"}
+{"emotionalState":"Neutral","level":"info","message":"Message analysis:","progressIndicators":[],"recommendedApproach":"Establish rapport. Simple greeting requires an equally simple and friendly response.","riskLevel":0,"themes":[],"timestamp":"2025-10-08T00:25:44.309Z"}
+{"level":"info","message":"Generated response:","timestamp":"2025-10-08T00:25:45.133Z"}
+{"level":"info","message":"Session updated successfully:","sessionId":"fb596987-00fa-4ef8-aab4-91e5e8082304","timestamp":"2025-10-08T00:25:45.240Z"}
+{"level":"info","message":"Processing message: doing great","sessionId":"fb596987-00fa-4ef8-aab4-91e5e8082304","timestamp":"2025-10-08T00:25:54.922Z"}
+{"emotionalState":"positive","level":"info","message":"Message analysis:","progressIndicators":["positive self-report"],"recommendedApproach":"Positive reinforcement and continued monitoring. Explore the reasons behind the reported success to solidify progress and identify potential challenges in maintaining it.","riskLevel":0,"themes":[],"timestamp":"2025-10-08T00:25:56.644Z"}
+{"level":"info","message":"Generated response:","timestamp":"2025-10-08T00:25:58.064Z"}
+{"level":"info","message":"Session updated successfully:","sessionId":"fb596987-00fa-4ef8-aab4-91e5e8082304","timestamp":"2025-10-08T00:25:58.154Z"}
+{"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T00:39:04.205Z"}
+{"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T00:39:21.694Z"}
+{"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T00:43:05.999Z"}
+{"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T00:44:19.585Z"}
+{"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T00:44:23.864Z"}
+{"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T00:44:31.297Z"}
+{"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T00:44:35.646Z"}
+{"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T00:44:48.908Z"}
+{"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T00:45:03.846Z"}
+{"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-08T12:34:21.142Z"}

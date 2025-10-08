@@ -83,7 +83,10 @@ export const getChatHistory = async (
       timestamp: new Date(msg.timestamp),
       metadata: msg.metadata,
     }));
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.response?.status === 404) {
+      return [];
+    }
     console.error("Error fetching chat history:", error);
     throw error;
   }
@@ -107,6 +110,15 @@ export const getAllChatSessions = async (): Promise<ChatSession[]> => {
     });
   } catch (error) {
     console.error("Error fetching chat sessions:", error);
+    throw error;
+  }
+};
+
+export const deleteChatSession = async (sessionId: string): Promise<void> => {
+  try {
+    await api.delete(`/chat/sessions/${sessionId}`);
+  } catch (error) {
+    console.error("Error deleting chat session:", error);
     throw error;
   }
 };

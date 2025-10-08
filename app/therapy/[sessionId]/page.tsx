@@ -16,6 +16,7 @@ import {
   Smile,
   PlusCircle,
   MessageSquare,
+  Trash2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -39,6 +40,7 @@ import {
   ChatMessage,
   getAllChatSessions,
   ChatSession,
+  deleteChatSession,
 } from "@/lib/api/chat";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatDistanceToNow } from "date-fns";
@@ -424,6 +426,37 @@ export default function TherapyPage() {
     }
   };
 
+  const handleDeleteSession = async (
+    sessionIdToDelete: string,
+    e: React.MouseEvent
+  ) => {
+    e.stopPropagation(); // Prevent session selection
+
+    if (
+      window.confirm(
+        "Are you sure you want to delete this session? This action cannot be undone."
+      )
+    ) {
+      try {
+        await deleteChatSession(sessionIdToDelete);
+
+        // Remove from local state
+        setSessions((prev) =>
+          prev.filter((s) => s.sessionId !== sessionIdToDelete)
+        );
+
+        // If we're currently viewing the deleted session, redirect to new session
+        if (sessionIdToDelete === sessionId) {
+          const newSessionId = await createChatSession();
+          router.push(`/therapy/${newSessionId}`);
+        }
+      } catch (error) {
+        console.error("Error deleting session:", error);
+        // You could add a toast notification here
+      }
+    }
+  };
+
   return (
     <div className="relative max-w-7xl mx-auto px-4">
       <div className="flex h-[calc(100vh-4rem)] mt-20 gap-6">
@@ -474,11 +507,22 @@ export default function TherapyPage() {
                   )}
                   onClick={() => handleSessionSelect(session.sessionId)}
                 >
-                  <div className="flex items-center gap-2 mb-1">
-                    <MessageSquare className="w-4 h-4" />
-                    <span className="font-medium">
-                      {session.messages[0]?.content.slice(0, 30) || "New Chat"}
-                    </span>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                      <MessageSquare className="w-4 h-4" />
+                      <span className="font-medium">
+                        {session.messages[0]?.content.slice(0, 30) ||
+                          "New Chat"}
+                      </span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 w-6 p-0 hover:bg-destructive/10 hover:text-destructive"
+                      onClick={(e) => handleDeleteSession(session.sessionId, e)}
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </Button>
                   </div>
                   <p className="line-clamp-2 text-muted-foreground">
                     {session.messages[session.messages.length - 1]?.content ||
@@ -592,9 +636,11 @@ export default function TherapyPage() {
             <div className="flex-1 overflow-y-auto scroll-smooth">
               <div className="max-w-3xl mx-auto">
                 <AnimatePresence initial={false}>
-                  {messages.map((msg) => (
+                  {messages.map((msg, index) => (
                     <motion.div
-                      key={msg.timestamp.toISOString()}
+                      key={`${msg.timestamp.toISOString()}-${
+                        msg.role
+                      }-${index}`}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3 }}
