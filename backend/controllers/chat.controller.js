@@ -2,8 +2,8 @@ const { ChatSession } = require("../models/ChatSession");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { v4: uuidv4 } = require("uuid");
 const { logger } = require("../utils/logger");
-const { inngest } = require("../inngest/client");
-const { User } = require("../models/User");
+// const { inngest } = require("../inngest/client");
+const User = require("../models/user.model");
 const { Types } = require("mongoose");
 
 // Initialize Gemini API
@@ -58,7 +58,7 @@ const sendMessage = async (req, res) => {
     const { sessionId } = req.params;
     const { message } = req.body;
     const userId = new Types.ObjectId(req.user.id);
-
+    // https://cursor.com/loginDeepControl?challenge=hdqZqJ2MSKFXpu7BeNjLjqynpika3oLTan3K7nnElkA&uuid=8f8c1371-af7f-4ebe-aaa1-c022ec3c933e&mode=login
     logger.info("Processing message:", { sessionId, message });
 
     const session = await ChatSession.findOne({ sessionId });
@@ -98,8 +98,8 @@ const sendMessage = async (req, res) => {
       },
     };
 
-    logger.info("Sending message to Inngest:", { event });
-    await inngest.send(event);
+    // logger.info("Sending message to Inngest:", { event });
+    // await inngest.send(event);
 
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
@@ -121,7 +121,9 @@ const sendMessage = async (req, res) => {
 
     const analysisResult = await model.generateContent(analysisPrompt);
     const analysisText = analysisResult.response.text().trim();
-    const cleanAnalysisText = analysisText.replace(/```json\n|\n```/g, "").trim();
+    const cleanAnalysisText = analysisText
+      .replace(/```json\n|\n```/g, "")
+      .trim();
     const analysis = JSON.parse(cleanAnalysisText);
 
     logger.info("Message analysis:", analysis);

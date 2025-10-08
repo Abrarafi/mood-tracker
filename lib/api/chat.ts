@@ -1,3 +1,5 @@
+import api from "../api";
+
 export interface ChatMessage {
   role: "user" | "assistant";
   content: string;
@@ -40,35 +42,11 @@ export interface ApiResponse {
   };
 }
 
-const API_BASE =
-  process.env.BACKEND_API_URL ||
-  "https://ai-therapist-agent-backend.onrender.com";
-
-// Helper function to get auth headers
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("token");
-  return {
-    "Content-Type": "application/json",
-    Authorization: token ? `Bearer ${token}` : "",
-  };
-};
+// Using shared axios client with baseURL and withCredentials
 
 export const createChatSession = async (): Promise<string> => {
   try {
-    console.log("Creating new chat session...");
-    const response = await fetch(`${API_BASE}/chat/sessions`, {
-      method: "POST",
-      headers: getAuthHeaders(),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      console.error("Failed to create chat session:", error);
-      throw new Error(error.error || "Failed to create chat session");
-    }
-
-    const data = await response.json();
-    console.log("Chat session created:", data);
+    const { data } = await api.post<{ sessionId: string }>("/chat/sessions");
     return data.sessionId;
   } catch (error) {
     console.error("Error creating chat session:", error);
@@ -81,24 +59,10 @@ export const sendChatMessage = async (
   message: string
 ): Promise<ApiResponse> => {
   try {
-    console.log(`Sending message to session ${sessionId}:`, message);
-    const response = await fetch(
-      `${API_BASE}/chat/sessions/${sessionId}/messages`,
-      {
-        method: "POST",
-        headers: getAuthHeaders(),
-        body: JSON.stringify({ message }),
-      }
+    const { data } = await api.post<ApiResponse>(
+      `/chat/sessions/${sessionId}/messages`,
+      { message }
     );
-
-    if (!response.ok) {
-      const error = await response.json();
-      console.error("Failed to send message:", error);
-      throw new Error(error.error || "Failed to send message");
-    }
-
-    const data = await response.json();
-    console.log("Message sent successfully:", data);
     return data;
   } catch (error) {
     console.error("Error sending chat message:", error);
@@ -110,29 +74,9 @@ export const getChatHistory = async (
   sessionId: string
 ): Promise<ChatMessage[]> => {
   try {
-    console.log(`Fetching chat history for session ${sessionId}`);
-    const response = await fetch(
-      `${API_BASE}/chat/sessions/${sessionId}/history`,
-      {
-        headers: getAuthHeaders(),
-      }
+    const { data } = await api.get<ChatMessage[]>(
+      `/chat/sessions/${sessionId}/history`
     );
-
-    if (!response.ok) {
-      const error = await response.json();
-      console.error("Failed to fetch chat history:", error);
-      throw new Error(error.error || "Failed to fetch chat history");
-    }
-
-    const data = await response.json();
-    console.log("Received chat history:", data);
-
-    if (!Array.isArray(data)) {
-      console.error("Invalid chat history format:", data);
-      throw new Error("Invalid chat history format");
-    }
-
-    // Ensure each message has the correct format
     return data.map((msg: any) => ({
       role: msg.role,
       content: msg.content,
@@ -147,25 +91,10 @@ export const getChatHistory = async (
 
 export const getAllChatSessions = async (): Promise<ChatSession[]> => {
   try {
-    console.log("Fetching all chat sessions...");
-    const response = await fetch(`${API_BASE}/chat/sessions`, {
-      headers: getAuthHeaders(),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      console.error("Failed to fetch chat sessions:", error);
-      throw new Error(error.error || "Failed to fetch chat sessions");
-    }
-
-    const data = await response.json();
-    console.log("Received chat sessions:", data);
-
+    const { data } = await api.get<any[]>(`/chat/sessions`);
     return data.map((session: any) => {
-      // Ensure dates are valid
       const createdAt = new Date(session.createdAt || Date.now());
       const updatedAt = new Date(session.updatedAt || Date.now());
-
       return {
         ...session,
         createdAt: isNaN(createdAt.getTime()) ? new Date() : createdAt,
@@ -174,7 +103,7 @@ export const getAllChatSessions = async (): Promise<ChatSession[]> => {
           ...msg,
           timestamp: new Date(msg.timestamp || Date.now()),
         })),
-      };
+      } as ChatSession;
     });
   } catch (error) {
     console.error("Error fetching chat sessions:", error);
