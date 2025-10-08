@@ -378,18 +378,82 @@ export default function TherapyPage() {
     return null;
   };
 
-  const handleSuggestedQuestion = async (text: string) => {
-    if (!sessionId) {
-      const newSessionId = await createChatSession();
-      setSessionId(newSessionId);
-      router.push(`/therapy/${newSessionId}`);
+  // Send a message without relying on the form submit path (used by suggested questions)
+  const sendMessageDirect = async (text: string) => {
+    const currentMessage = text.trim();
+    if (!currentMessage || isTyping || isChatPaused) return;
+
+    // Ensure a session exists
+    let id = sessionId;
+    if (!id) {
+      id = await createChatSession();
+      setSessionId(id);
+      router.push(`/therapy/${id}`);
     }
 
-    setMessage(text);
-    setTimeout(() => {
-      const event = new Event("submit") as unknown as React.FormEvent;
-      handleSubmit(event);
-    }, 0);
+    // Add user message immediately
+    const userMessage: ChatMessage = {
+      role: "user",
+      content: currentMessage,
+      timestamp: new Date(),
+    };
+    setMessages((prev) => [...prev, userMessage]);
+
+    // Stress prompt short-circuit
+    const stressCheck = detectStressSignals(currentMessage);
+    if (stressCheck) {
+      setStressPrompt(stressCheck);
+      // Continue to send the message even if a stress prompt is detected
+    }
+
+    setIsTyping(true);
+    try {
+      const response = await sendChatMessage(id as string, currentMessage);
+      const aiResponse =
+        typeof response === "string" ? JSON.parse(response) : response;
+
+      const assistantMessage: ChatMessage = {
+        role: "assistant",
+        content:
+          aiResponse.response ||
+          aiResponse.message ||
+          "I'm here to support you. Could you tell me more about what's on your mind?",
+        timestamp: new Date(),
+        metadata: {
+          analysis: aiResponse.analysis || {
+            emotionalState: "neutral",
+            riskLevel: 0,
+            themes: [],
+            recommendedApproach: "supportive",
+            progressIndicators: [],
+          },
+          technique: aiResponse.metadata?.technique || "supportive",
+          goal: aiResponse.metadata?.currentGoal || "Provide support",
+          progress: aiResponse.metadata?.progress || {
+            emotionalState: "neutral",
+            riskLevel: 0,
+          },
+        },
+      };
+      setMessages((prev) => [...prev, assistantMessage]);
+      scrollToBottom();
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content:
+            "I apologize, but I'm having trouble connecting right now. Please try again in a moment.",
+          timestamp: new Date(),
+        },
+      ]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  const handleSuggestedQuestion = async (text: string) => {
+    await sendMessageDirect(text);
   };
 
   const handleCompleteSession = async () => {
@@ -607,7 +671,7 @@ export default function TherapyPage() {
 
                 <div className="grid gap-3 relative">
                   <motion.div
-                    className="absolute -inset-4 bg-gradient-to-b from-primary/5 to-transparent blur-xl"
+                    className="absolute -inset-4 bg-gradient-to-b from-primary/5 to-transparent blur-xl pointer-events-none"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
