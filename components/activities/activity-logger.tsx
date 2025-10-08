@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createActivity } from "@/lib/db/actions";
+import { logActivity } from "@/lib/api/activity";
 import { useAuth } from "@/lib/contexts/auth-context";
 
 const activityTypes = [
@@ -55,12 +55,12 @@ export function ActivityLogger({
     if (!user?._id || !type || !name) return;
     setIsLoading(true);
     try {
-      await createActivity({
-        userId: user._id,
+      await logActivity({
         type,
         name,
         description,
         duration: duration ? parseInt(duration) : undefined,
+        completed: true,
       });
 
       // Reset form

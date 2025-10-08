@@ -60,12 +60,14 @@ import { ActivityList } from "@/components/activities/activity-list";
 import { ChatHistory } from "@/components/chat/chat-history";
 import {
   getTodaysActivities,
-  updateActivityStatus,
   getLatestHealthMetrics,
-  getUserActivities,
   saveMoodData,
-  logActivity,
 } from "@/lib/db/actions";
+import {
+  getUserActivities,
+  logActivity,
+  updateActivityStatus,
+} from "@/lib/api/activity";
 import { StartSessionModal } from "@/components/therapy/start-session-modal";
 import { SessionHistory } from "@/components/therapy/session-history";
 import {
@@ -505,7 +507,7 @@ export default function Dashboard() {
   const loadActivities = useCallback(async () => {
     if (!user?._id) return;
     try {
-      const userActivities = await getUserActivities(user._id);
+      const userActivities = await getUserActivities(30);
       setActivities(userActivities);
       setActivityHistory(transformActivitiesToDayActivity(userActivities));
     } catch (error) {
@@ -705,14 +707,13 @@ export default function Dashboard() {
 
       try {
         await logActivity({
-          userId: user._id,
           type: "game",
           name: gameName,
           description: description,
           completed: true,
-          duration: null, // Games typically don't have fixed durations
-          moodScore: null,
-          moodNote: null,
+          duration: undefined, // Games typically don't have fixed durations
+          moodScore: undefined,
+          moodNote: undefined,
         });
 
         // Refresh activities after logging

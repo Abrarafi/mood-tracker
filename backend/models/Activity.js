@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
@@ -20,6 +20,9 @@ const activitySchema = new Schema(
         "reading",
         "journaling",
         "therapy",
+        "game",
+        "breathing",
+        "mood",
       ],
     },
     name: {
@@ -32,6 +35,25 @@ const activitySchema = new Schema(
     duration: {
       type: Number,
       min: 0,
+    },
+    difficulty: {
+      type: String,
+      enum: ["easy", "medium", "hard"],
+    },
+    feedback: {
+      type: String,
+    },
+    completed: {
+      type: Boolean,
+      default: true,
+    },
+    moodScore: {
+      type: Number,
+      min: 0,
+      max: 100,
+    },
+    moodNote: {
+      type: String,
     },
     timestamp: {
       type: Date,
@@ -46,4 +68,5 @@ const activitySchema = new Schema(
 // Index for efficient querying
 activitySchema.index({ userId: 1, timestamp: -1 });
 
-export const Activity = mongoose.model("Activity", activitySchema);
+const Activity = mongoose.model("Activity", activitySchema);
+module.exports = { Activity };
