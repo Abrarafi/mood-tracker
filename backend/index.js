@@ -7,6 +7,7 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const authRouter = require("./routes/auth.routes");
 const chatRouter = require("./routes/chat.routes");
+const moodRouter = require("./routes/mood.routes");
 let logger;
 try {
   logger = require("./config/logger");
@@ -32,6 +33,7 @@ app.get("/health", (req, res) => {
 // API routes
 app.use("/auth", authRouter);
 app.use("/chat", chatRouter);
+app.use("/api/mood", moodRouter);
 
 // Basic error handler
 app.use((err, req, res, next) => {
