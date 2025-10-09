@@ -27,7 +27,7 @@ export function Header() {
 
   const navItems = [
     { href: "/features", label: "Features" },
-    { href: "/about", label: "About Aura" },
+    { href: "/about", label: "About SoulCare" },
   ];
 
   return (
@@ -45,7 +45,7 @@ export function Header() {
                 SoulCare AI
               </span>
               <span className="text-xs dark:text-muted-foreground">
-                sonic DeFAI hackathon
+                A Final Year Project by Abrar Rafi & Tarikul Islam
               </span>
             </div>
           </Link>

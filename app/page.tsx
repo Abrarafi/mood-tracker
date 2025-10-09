@@ -53,7 +53,7 @@ export default function Home() {
 
   const welcomeSteps = [
     {
-      title: "Hi, I'm Aura 👋",
+      title: "Hi, I'm SoulCare AI 👋",
       description:
         "Your AI companion for emotional well-being. I'm here to provide a safe, judgment-free space for you to express yourself.",
       icon: Waves,
@@ -266,7 +266,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <motion.div className="text-center mb-16 space-y-4 text-white ">
             <h2 className="text-3xl font-bold bg-gradient-to-r from-primary/90 to-primary bg-clip-text text-transparent dark:text-primary/90">
-              How Aura Helps You
+              How SoulCare Helps You
             </h2>
             <p className="text-foreground dark:text-foreground/95 max-w-2xl mx-auto font-medium text-lg">
               Experience a new kind of emotional support, powered by empathetic

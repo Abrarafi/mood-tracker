@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Poster Generator</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #controls {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        #controls label {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        #controls input[type="text"],
+        #controls textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        
+        #controls button {
+            background-color: #c0392b; /* Dark Red */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+        
+        #controls button:hover {
+            background-color: #a02c21;
+        }
+        
+        #controls input[type="file"] {
+            margin-bottom: 15px;
+        }
+
+        /* --- Quote Poster Design --- */
+        #poster-container {
+            width: 100%;
+            max-width: 500px; /* Standard poster size for social media */
+            aspect-ratio: 1 / 1; /* Square poster */
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        #poster {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            font-family: 'Baloo Da 2', sans-serif;
+            background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(100,10,10,0.8) 50%, #700a0a 100%);
+            background-color: #641515; /* Base color */
+        }
+
+        /* Background Image Layer */
+        #speaker-bg-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #speaker-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            filter: brightness(0.7) contrast(1.1);
+        }
+        
+        /* Overlay for text readability */
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.1) 100%);
+        }
+
+        /* Content inside the poster */
+        #content-area {
+            position: relative;
+            z-index: 10;
+            padding: 20px;
+            color: white;
+        }
+
+        /* Quote Frame */
+        #quote-frame {
+            border: 3px solid white;
+            padding: 20px 15px;
+            margin: 30px 0;
+            position: relative;
+            background-color: rgba(0, 0, 0, 0.3); /* Slightly darken the quote area */
+        }
+
+        .quote-mark {
+            font-size: 150px;
+            line-height: 0.5;
+            color: white;
+            position: absolute;
+            z-index: 5;
+        }
+
+        #top-quote {
+            top: -50px;
+            left: 5px;
+        }
+
+        #bottom-quote {
+            bottom: -50px;
+            right: 5px;
+            transform: scaleX(-1);
+        }
+
+        #quote-text {
+            font-size: 28px;
+            line-height: 1.5;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .highlight {
+            color: #ff4757; /* Bright Red highlight */
+            font-weight: 700;
+        }
+        
+        /* Speaker Info */
+        #speaker-info {
+            text-align: right;
+            margin-top: 10px;
+            padding-right: 15px;
+        }
+
+        #speaker-name {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        #speaker-designation {
+            font-size: 14px;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+        
+        /* Footer */
+        #footer {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        #logo-display {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            background-color: white;
+            padding: 5px;
+            border-radius: 50%;
+            margin-right: 10px;
+            /* Remove drop-shadow to make it easier to download */
+        }
+
+        #org-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        /* Utility for Bangla font in inputs */
+        .bangla-font {
+             font-family: 'Baloo Da 2', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="controls">
+        <h2>Poster Generator Controls</h2>
+
+        <label for="quote-input">Quote Text (Use **word** to highlight in red):</label>
+        <textarea id="quote-input" class="bangla-font" rows="4" placeholder='যেমন: “আমাদের হৃদয়ে **রক্তক্ষরণ** হচ্ছে; হায়েনারা এত গভীরভাবে আঘাত হানবে, এটা কল্পনারও বাইরে ছিল”'>আমাদের হৃদয়ে **রক্তক্ষরণ** হচ্ছে; হায়েনারা এত গভীরভাবে আঘাত হানবে, এটা কল্পনারও বাইরে ছিল</textarea>
+
+        <label for="speaker-name-input">Speaker Name:</label>
+        <input type="text" id="speaker-name-input" class="bangla-font" placeholder="অধ্যাপক ইফতিখাকুল আলম মাসউদ" value="অধ্যাপক ইফতিখাকুল আলম মাসউদ">
+        
+        <label for="speaker-designation-input">Speaker Designation/Title:</label>
+        <input type="text" id="speaker-designation-input" class="bangla-font" placeholder="রেজিস্ট্রার, রাজশাহী বিশ্ববিদ্যালয়" value="রেজিস্ট্রার, রাজশাহী বিশ্ববিদ্যালয়">
+
+        <label for="speaker-photo-upload">Upload Speaker Photo (For Background):</label>
+        <input type="file" id="speaker-photo-upload" accept="image/*">
+        
+        <label for="logo-upload">Upload Footer Logo (Optional):</label>
+        <input type="file" id="logo-upload" accept="image/*">
+        
+        <label for="org-name-input">Organization Name (Footer):</label>
+        <input type="text" id="org-name-input" class="bangla-font" value="Rajshahi University Dawah Community" placeholder="Rajshahi University Dawah Community">
+
+        <button id="download-btn">Download Poster (PNG)</button>
+    </div>
+
+    <div id="poster-container">
+        <div id="poster">
+            <div id="speaker-bg-container">
+                <img id="speaker-bg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="Speaker Photo">
+            </div>
+            <div id="overlay"></div>
+
+            <div id="content-area">
+                <div id="quote-frame">
+                    <span class="quote-mark" id="top-quote">“</span>
+                    <div id="quote-text">
+                        আমাদের হৃদয়ে <span class="highlight">রক্তক্ষরণ</span> হচ্ছে; হায়েনারা এত গভীরভাবে আঘাত হানবে, এটা কল্পনারও বাইরে ছিল
+                    </div>
+                    <span class="quote-mark" id="bottom-quote">”</span>
+                </div>
+                
+                <div id="speaker-info">
+                    <div id="speaker-name">অধ্যাপক ইফতিখাকুল আলম মাসউদ</div>
+                    <div id="speaker-designation">রেজিস্ট্রার, রাজশাহী বিশ্ববিদ্যালয়</div>
+                </div>
+            </div>
+
+            <div id="footer">
+                <img id="logo-display" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="Logo">
+                <div id="org-name">Rajshahi University Dawah Community</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const quoteInput = document.getElementById('quote-input');
+        const speakerNameInput = document.getElementById('speaker-name-input');
+        const speakerDesignationInput = document.getElementById('speaker-designation-input');
+        const orgNameInput = document.getElementById('org-name-input');
+        const speakerPhotoUpload = document.getElementById('speaker-photo-upload');
+        const logoUpload = document.getElementById('logo-upload');
+        const downloadBtn = document.getElementById('download-btn');
+        
+        const quoteTextDisplay = document.getElementById('quote-text');
+        const speakerNameDisplay = document.getElementById('speaker-name');
+        const speakerDesignationDisplay = document.getElementById('speaker-designation');
+        const speakerBg = document.getElementById('speaker-bg');
+        const logoDisplay = document.getElementById('logo-display');
+        const orgNameDisplay = document.getElementById('org-name');
+        const posterContainer = document.getElementById('poster-container');
+        
+        // --- 1. Update Poster Content ---
+        
+        function updateQuotePoster() {
+            // 1. Quote Text with Highlight
+            const rawQuote = quoteInput.value;
+            // Use regex to find text wrapped in ** and wrap it in a span with the highlight class
+            const formattedQuote = rawQuote.replace(/\*\*(.*?)\*\*/g, '<span class="highlight">$1</span>');
+            quoteTextDisplay.innerHTML = formattedQuote || 'Your Quote Here'; // Add a fallback
+            
+            // 2. Speaker and Organization Info
+            speakerNameDisplay.textContent = speakerNameInput.value;
+            speakerDesignationDisplay.textContent = speakerDesignationInput.value;
+            orgNameDisplay.textContent = orgNameInput.value;
+        }
+
+        // Attach event listeners to all text inputs
+        [quoteInput, speakerNameInput, speakerDesignationInput, orgNameInput].forEach(input => {
+            input.addEventListener('input', updateQuotePoster);
+        });
+        
+        // Initial call to set up the poster with default/provided values
+        updateQuotePoster();
+
+        // --- 2. Image Loading Functionality ---
+        
+        function handleImageUpload(inputElement, imgElement) {
+            if (inputElement.files && inputElement.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imgElement.src = e.target.result;
+                };
+                reader.readAsDataURL(inputElement.files[0]);
+            }
+        }
+
+        speakerPhotoUpload.addEventListener('change', () => {
+            handleImageUpload(speakerPhotoUpload, speakerBg);
+        });
+
+        logoUpload.addEventListener('change', () => {
+            handleImageUpload(logoUpload, logoDisplay);
+        });
+
+        // --- 3. Download Functionality (using html2canvas) ---
+        
+        downloadBtn.addEventListener('click', () => {
+            // Use html2canvas to capture the #poster element
+            html2canvas(posterContainer, {
+                allowTaint: true, // Needed for images loaded from data URLs (File API)
+                useCORS: true,
+                scale: 2 // Increase scale for higher resolution
+            }).then(canvas => {
+                // Convert the canvas to a data URL (PNG format)
+                const imageURL = canvas.toDataURL('image/png');
+                
+                // Create a temporary link element for download
+                const a = document.createElement('a');
+                a.href = imageURL;
+                a.download = 'quote-poster.png';
+                
+                // Programmatically click the link to trigger download
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            });
+        });
+    </script>
+</body>
+</html>
