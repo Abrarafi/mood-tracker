@@ -19,18 +19,17 @@ export function Providers({ children }: { children: React.ReactNode }) {
     //   }}
     // >
     <SessionProvider>
-    <AuthProvider>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      >
-        {children}
-      </ThemeProvider>
-    </AuthProvider>
+      <AuthProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </AuthProvider>
     </SessionProvider>
     // </PrivyProvider>
   );
 }
-  

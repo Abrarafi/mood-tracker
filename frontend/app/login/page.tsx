@@ -12,7 +12,6 @@ import { Lock, Mail } from "lucide-react";
 import { useAuth } from "@/lib/contexts/auth-context";
 import { useToast } from "../components/ui/use-toast";
 
-
 export default function LoginPage() {
   const { login, user } = useAuth();
   const router = useRouter();

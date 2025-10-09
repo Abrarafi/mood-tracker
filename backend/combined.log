@@ -104,3 +104,8 @@
 {"level":"info","message":"Mood entry created for user 68e3bc899cf98e0b117da748","timestamp":"2025-10-08T17:47:50.047Z"}
 {"level":"info","message":"Mood entry created for user 68e3bc899cf98e0b117da748","timestamp":"2025-10-08T17:48:54.636Z"}
 {"level":"info","message":"Mood entry created for user 68e3bc899cf98e0b117da748","timestamp":"2025-10-09T00:48:15.057Z"}
+{"level":"info","message":"Server is running on port 5000","timestamp":"2025-10-09T03:25:38.257Z"}
+{"level":"info","message":"Processing message: How can I manage my anxiety better?","sessionId":"320fc3e0-9402-4767-9deb-5e8a82e520a6","timestamp":"2025-10-09T03:26:09.560Z"}
+{"emotionalState":"Anxious","level":"info","message":"Message analysis:","progressIndicators":["Reduced anxiety levels","Improved coping skills","Increased ability to manage anxiety triggers"],"recommendedApproach":"Psychoeducation on anxiety, exploration of coping strategies (e.g., deep breathing, mindfulness), and identification of anxiety triggers. Referral to a therapist may be beneficial if anxiety is severe or persistent.","riskLevel":1,"themes":["Anxiety Management","Coping Mechanisms"],"timestamp":"2025-10-09T03:26:11.635Z"}
+{"level":"info","message":"Generated response:","timestamp":"2025-10-09T03:26:14.659Z"}
+{"level":"info","message":"Session updated successfully:","sessionId":"320fc3e0-9402-4767-9deb-5e8a82e520a6","timestamp":"2025-10-09T03:26:14.759Z"}

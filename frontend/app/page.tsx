@@ -76,13 +76,12 @@ export default function Home() {
     setMounted(true);
   }, []);
 
-
   const handleLetsBegin = () => {
     if (!isAuthenticated) {
       setShowLoginModal(true);
       return;
     }
-    
+
     // If authenticated, proceed with the original logic
     setShowDialog(false);
     setCurrentStep(0);
