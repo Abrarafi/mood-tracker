@@ -21,6 +21,7 @@ import {
   Target,
   Clock,
   Award,
+  Book,
 } from "lucide-react";
 import { MindfulnessTracker } from "./mindfulness-tracker";
 import { MindfulnessSession } from "./mindfulness-session";
@@ -54,11 +55,11 @@ const quickSessions = [
     bgColor: "bg-rose-500/10",
   },
   {
-    type: "yoga" as const,
+    type: "recitation" as const,
     duration: 20,
-    title: "Gentle Yoga",
-    description: "20-minute mindful yoga",
-    icon: Flower2,
+    title: "Quran Recitation",
+    description: "20-minute mindful recitation",
+    icon: Book,
     color: "text-green-500",
     bgColor: "bg-green-500/10",
   },

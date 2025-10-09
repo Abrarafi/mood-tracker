@@ -55,7 +55,7 @@ import { MoodForm } from "@/components/mood/mood-form";
 import { AnxietyGames } from "@/components/games/anxiety-games";
 import { ExpandableChat } from "@/components/chat/expandable-chat";
 import { MindfulnessDashboard } from "@/components/mindfulness/mindfulness-dashboard";
-import { FitbitConnect } from "@/components/wearables/fitbit-connect";
+
 import { ActivityList } from "@/components/activities/activity-list";
 import { ChatHistory } from "@/components/chat/chat-history";
 import {
@@ -197,9 +197,11 @@ const calculateDailyStats = (activities: Activity[]) => {
       ? Math.round((completedActivities / todaysActivities.length) * 100)
       : 0;
 
-  // Count mindfulness activities (games, meditation, breathing, mindfulness, yoga)
+  // Count mindfulness activities (games, meditation, breathing, mindfulness, recitation)
   const mindfulnessActivities = todaysActivities.filter((a) =>
-    ["game", "meditation", "breathing", "mindfulness", "yoga"].includes(a.type)
+    ["game", "meditation", "breathing", "mindfulness", "recitation"].includes(
+      a.type
+    )
   ).length;
 
   return {
@@ -256,7 +258,9 @@ const generateAIInsights = (activities: Activity[]) => {
 
   // Analyze activity patterns
   const mindfulnessActivities = recentActivities.filter((a) =>
-    ["game", "meditation", "breathing", "mindfulness", "yoga"].includes(a.type)
+    ["game", "meditation", "breathing", "mindfulness", "recitation"].includes(
+      a.type
+    )
   );
   if (mindfulnessActivities.length > 0) {
     const dailyAverage = mindfulnessActivities.length / 7;
@@ -619,7 +623,7 @@ export default function Dashboard() {
       bgColor: "bg-rose-500/10",
       description:
         todayStats.mindfulnessCount > 0
-          ? `Meditation, breathing, yoga & mindfulness activities`
+          ? `Meditation, breathing, recitation & mindfulness activities`
           : "Start a mindfulness practice today",
     },
     {
@@ -1046,49 +1050,6 @@ export default function Dashboard() {
             {/* Left side - Spans 2 columns */}
             <div className="lg:col-span-2 space-y-6">
               {/* Fitbit Connect Card */}
-              <Card className="border-primary/10 overflow-hidden">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-6">
-                    {/* Left side - Icon */}
-                    <div className="shrink-0">
-                      <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center ring-2 ring-primary/5">
-                        <Wifi className="w-6 h-6" />
-                      </div>
-                    </div>
-
-                    {/* Middle - Text content */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-semibold mb-1">
-                          Connect Your Fitbit
-                        </h3>
-                        <span className="text-xs bg-primary/10 text-white px-2 py-0.5 rounded-full font-medium">
-                          Coming Soon
-                        </span>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Track health metrics and get personalized insights
-                      </p>
-                    </div>
-
-                    {/* Right side - Button */}
-                    <div className="shrink-0">
-                      <Button
-                        className="bg-primary/20 hover:bg-primary/30 cursor-not-allowed"
-                        disabled
-                      >
-                        Connect
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Security note */}
-                  <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
-                    <span className="w-1 h-1 rounded-full bg-green-500" />
-                    <span>Integration coming soon - Stay tuned!</span>
-                  </div>
-                </CardContent>
-              </Card>
 
               {/* Anxiety Games - Now directly below Fitbit */}
               <AnxietyGames onGamePlayed={handleGamePlayed} />

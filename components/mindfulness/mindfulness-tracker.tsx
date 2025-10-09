@@ -17,6 +17,7 @@ import {
   Clock,
   Award,
   Sparkles,
+  Book,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -49,7 +50,7 @@ const mindfulnessTypes = [
   "meditation",
   "breathing",
   "mindfulness",
-  "yoga",
+  "recitation",
   "game",
 ];
 
@@ -61,8 +62,8 @@ const getMindfulnessIcon = (type: string) => {
       return Wind;
     case "mindfulness":
       return Heart;
-    case "yoga":
-      return Flower2;
+    case "recitation":
+      return Book;
     case "game":
       return Sparkles;
     default:
@@ -78,7 +79,7 @@ const getMindfulnessColor = (type: string) => {
       return "text-blue-500";
     case "mindfulness":
       return "text-rose-500";
-    case "yoga":
+    case "recitation":
       return "text-green-500";
     case "game":
       return "text-yellow-500";

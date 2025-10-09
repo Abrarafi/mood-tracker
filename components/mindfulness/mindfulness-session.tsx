@@ -17,11 +17,12 @@ import {
   Wind,
   Brain,
   Flower2,
+  Book,
 } from "lucide-react";
 import { logActivity } from "@/lib/api/activity";
 
 interface MindfulnessSessionProps {
-  type: "meditation" | "breathing" | "mindfulness" | "yoga";
+  type: "meditation" | "breathing" | "mindfulness" | "recitation";
   duration?: number; // in minutes
   onSessionComplete?: () => void;
 }
@@ -51,10 +52,10 @@ const sessionConfigs = {
     bgColor: "bg-rose-500/10",
     defaultDuration: 15,
   },
-  yoga: {
-    title: "Mindful Yoga",
-    description: "Connect body and mind through gentle movement",
-    icon: Flower2,
+  recitation: {
+    title: "Quran Recitation",
+    description: "Recite Quran mindfully",
+    icon: Book,
     color: "text-green-500",
     bgColor: "bg-green-500/10",
     defaultDuration: 20,
@@ -235,7 +236,7 @@ export function MindfulnessSession({
                 <li>• Stay present in the moment</li>
               </>
             )}
-            {type === "yoga" && (
+            {type === "recitation" && (
               <>
                 <li>• Move slowly and mindfully</li>
                 <li>• Listen to your body's limits</li>

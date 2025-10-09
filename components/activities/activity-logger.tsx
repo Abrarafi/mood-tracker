@@ -27,7 +27,7 @@ const activityTypes = [
   { id: "meditation", name: "Meditation" },
   { id: "breathing", name: "Breathing Exercise" },
   { id: "mindfulness", name: "Mindfulness Practice" },
-  { id: "yoga", name: "Yoga" },
+  { id: "recitation", name: "Recitation" },
   { id: "journaling", name: "Journaling" },
   { id: "exercise", name: "Exercise" },
   { id: "walking", name: "Walking" },
