@@ -21,7 +21,7 @@ export function LoginModal() {
     showUserForm,
     isLoading,
     login,
-    updateUser,
+    // updateUser,
     setShowLoginModal,
   } = useAuth();
 
@@ -40,7 +40,7 @@ export function LoginModal() {
     setShowLoginModal(false);
     if (showUserForm) {
       if (!name.trim() || !email.trim()) return;
-      await updateUser({ name, email });
+      // await updateUser({ name, email });
     } else {
       router.push("/login");
     }

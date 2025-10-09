@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createTherapySession } from "@/lib/db/actions";
+// import { createTherapySession } from "@/lib/db/actions";
 import { useRouter } from "next/navigation";
 
 export function StartSessionModal() {

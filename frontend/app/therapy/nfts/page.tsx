@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/contexts/auth-context";
-import { NFTGallery } from "@/app/components/therapy/nft-gallery";
-import { getUserSessions } from "@/lib/contracts/therapy-actions";
+// import { NFTGallery } from "@/app/components/therapy/nft-gallery";
+// import { getUserSessions } from "@/lib/contracts/therapy-actions";
 import { ethers } from "ethers";
 import {
   Loader2,

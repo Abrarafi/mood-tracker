@@ -51,33 +51,33 @@ import {
 import { Container } from "@/components/ui/container";
 import { cn } from "@/lib/utils";
 
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Input } from "@/components/ui/input";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
+// import { ScrollArea } from "@/components/ui/scroll-area";
+// import { Input } from "@/components/ui/input";
+// import {
+//   Avatar,
+//   AvatarFallback,
+//   AvatarImage,
+// } from "@/components/ui/avatar";
 import { FixedChat } from "@/components/chat/fixed-chat";
 import { MoodForm } from "@/components/mood/mood-form";
 import { AnxietyGames } from "@/components/games/anxiety-games";
 import { ExpandableChat } from "@/components/chat/expandable-chat";
 import { MindfulnessDashboard } from "@/components/mindfulness/mindfulness-dashboard";
 
-import { ActivityList } from "@/components/activities/activity-list";
-import { ChatHistory } from "@/components/chat/chat-history";
-import {
-  getTodaysActivities,
-  getLatestHealthMetrics,
-  saveMoodData,
-} from "@/lib/db/actions";
+// import { ActivityList } from "@/components/activities/activity-list";
+// import { ChatHistory } from "@/components/chat/chat-history";
+// import {
+//   getTodaysActivities,
+//   getLatestHealthMetrics,
+//   saveMoodData,
+// } from "@/lib/db/actions";
 import {
   getUserActivities,
   logActivity,
   updateActivityStatus,
 } from "@/lib/api/activity";
-import { StartSessionModal } from "@/components/therapy/start-session-modal";
-import { SessionHistory } from "@/components/therapy/session-history";
+// import { StartSessionModal } from "@/components/therapy/start-session-modal";
+// import { SessionHistory } from "@/components/therapy/session-history";
 import {
   Dialog,
   DialogContent,
