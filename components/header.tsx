@@ -10,6 +10,7 @@ import {
   AudioWaveform,
   LogOut,
   LogIn,
+  LayoutDashboard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./theme-toggle";
@@ -74,8 +75,8 @@ export function Header() {
                     className="hidden md:flex gap-2 bg-primary/90 hover:bg-primary"
                   >
                     <Link href="/dashboard">
-                      <MessageCircle className="w-4 h-4 mr-1" />
-                      Start Chat
+                      <LayoutDashboard className="w-4 h-4 mr-1" />
+                      Dashboard
                     </Link>
                   </Button>
                   <Button
