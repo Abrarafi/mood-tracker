@@ -25,11 +25,15 @@ import { useAuth } from "@/lib/contexts/auth-context";
 
 const activityTypes = [
   { id: "meditation", name: "Meditation" },
+  { id: "breathing", name: "Breathing Exercise" },
+  { id: "mindfulness", name: "Mindfulness Practice" },
+  { id: "yoga", name: "Yoga" },
+  { id: "journaling", name: "Journaling" },
   { id: "exercise", name: "Exercise" },
   { id: "walking", name: "Walking" },
   { id: "reading", name: "Reading" },
-  { id: "journaling", name: "Journaling" },
   { id: "therapy", name: "Therapy Session" },
+  { id: "game", name: "Mindfulness Game" },
 ];
 
 interface ActivityLoggerProps {

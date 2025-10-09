@@ -54,7 +54,7 @@ import { FixedChat } from "@/components/chat/fixed-chat";
 import { MoodForm } from "@/components/mood/mood-form";
 import { AnxietyGames } from "@/components/games/anxiety-games";
 import { ExpandableChat } from "@/components/chat/expandable-chat";
-import { MoodTracker } from "@/components/mood/mood-tracker";
+import { MindfulnessDashboard } from "@/components/mindfulness/mindfulness-dashboard";
 import { FitbitConnect } from "@/components/wearables/fitbit-connect";
 import { ActivityList } from "@/components/activities/activity-list";
 import { ChatHistory } from "@/components/chat/chat-history";
@@ -197,9 +197,9 @@ const calculateDailyStats = (activities: Activity[]) => {
       ? Math.round((completedActivities / todaysActivities.length) * 100)
       : 0;
 
-  // Count mindfulness activities (games, meditation, etc.)
+  // Count mindfulness activities (games, meditation, breathing, mindfulness, yoga)
   const mindfulnessActivities = todaysActivities.filter((a) =>
-    ["game", "meditation", "breathing"].includes(a.type)
+    ["game", "meditation", "breathing", "mindfulness", "yoga"].includes(a.type)
   ).length;
 
   return {
@@ -256,7 +256,7 @@ const generateAIInsights = (activities: Activity[]) => {
 
   // Analyze activity patterns
   const mindfulnessActivities = recentActivities.filter((a) =>
-    ["game", "meditation", "breathing"].includes(a.type)
+    ["game", "meditation", "breathing", "mindfulness", "yoga"].includes(a.type)
   );
   if (mindfulnessActivities.length > 0) {
     const dailyAverage = mindfulnessActivities.length / 7;
@@ -617,7 +617,10 @@ export default function Dashboard() {
       icon: Heart,
       color: "text-rose-500",
       bgColor: "bg-rose-500/10",
-      description: "Mindfulness activities",
+      description:
+        todayStats.mindfulnessCount > 0
+          ? `Meditation, breathing, yoga & mindfulness activities`
+          : "Start a mindfulness practice today",
     },
     {
       title: "Total Activities",
@@ -1089,6 +1092,9 @@ export default function Dashboard() {
 
               {/* Anxiety Games - Now directly below Fitbit */}
               <AnxietyGames onGamePlayed={handleGamePlayed} />
+
+              {/* Mindfulness Dashboard */}
+              <MindfulnessDashboard />
             </div>
 
             {/* Right Column - Activities */}
