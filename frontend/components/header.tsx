@@ -46,7 +46,7 @@ export function Header() {
                 SoulCare AI
               </span>
               <span className="text-xs dark:text-muted-foreground">
-                A Final Year Project by Abrar Rafi & Tarikul Islam
+                A Final Year Project by Abrar Rafi
               </span>
             </div>
           </Link>

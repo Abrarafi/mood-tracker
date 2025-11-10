@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "SoulCare AI - Your Mental Wellness Companion",
-  description: "A Final Year Project by Abrar Rafi & Tarikul Islam",
+  description: "A Final Year Project by Abrar Rafi",
 };
 
 export default function RootLayout({
