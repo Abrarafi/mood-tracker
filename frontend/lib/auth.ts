@@ -71,12 +71,12 @@ export const refreshToken = async (): Promise<{ message: string }> => {
 
 export const getGoogleAuthUrl = (): string => {
   return `${
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"
+    process.env.NEXT_PUBLIC_API_URL || "https://soulcare-jsyf.onrender.com/api"
   }/auth/google`;
 };
 
 export const getGithubAuthUrl = (): string => {
   return `${
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"
+    process.env.NEXT_PUBLIC_API_URL || "https://soulcare-jsyf.onrender.com/api"
   }/auth/github`;
 };
