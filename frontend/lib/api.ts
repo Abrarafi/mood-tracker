@@ -3,7 +3,7 @@ import { refreshToken } from "./auth";
 
 const api = axios.create({
   baseURL:
-    process.env.NEXT_PUBLIC_API_URL || "https://soulcare-jsyf.onrender.com",
+    process.env.NEXT_PUBLIC_API_URL || "https://localhost:5000",
   headers: { "Content-Type": "application/json" },
   withCredentials: true,
 });
