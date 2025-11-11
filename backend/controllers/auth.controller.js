@@ -11,6 +11,7 @@ const cookieOptions = (maxAge) => ({
   sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   maxAge,
   path: '/',
+  domain: process.env.NODE_ENV === 'production' ? undefined : 'localhost', // explicitly set domain for localhost
 });
 
 const validateRegistration = (username, email, password) => {

@@ -3,10 +3,20 @@ import { refreshToken } from "./auth";
 import router from "next/router";
 
 const api = axios.create({
-  baseURL:
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000",
   headers: { "Content-Type": "application/json" },
   withCredentials: true,
+});
+
+// Debug: log outgoing requests
+api.interceptors.request.use((config) => {
+  console.log(`[API REQUEST] ${config.method?.toUpperCase()} ${config.url}`);
+  console.log(`[API] withCredentials: ${config.withCredentials}`);
+  console.log(`[API] baseURL: ${config.baseURL}`);
+  if (typeof document !== 'undefined') {
+    console.log(`[API] document.cookie:`, document.cookie);
+  }
+  return config;
 });
 
 let isRefreshing = false;

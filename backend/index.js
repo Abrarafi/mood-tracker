@@ -41,9 +41,48 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
 
+// Debug middleware to log cookies and headers
+app.use((req, res, next) => {
+  console.log(`\n[REQUEST] ${req.method} ${req.originalUrl}`);
+  console.log(`[ORIGIN] ${req.headers.origin || 'no origin header'}`);
+  console.log(`[COOKIES RECEIVED] accessToken: ${req.cookies.accessToken ? 'YES ✓' : 'NO ✗'}, refreshToken: ${req.cookies.refreshToken ? 'YES ✓' : 'NO ✗'}`);
+  
+  // Intercept response to log cookies being set
+  const originalSetHeader = res.setHeader;
+  res.setHeader = function(name, value) {
+    if (name.toLowerCase() === 'set-cookie') {
+      console.log(`[COOKIES SET] ${Array.isArray(value) ? value.join(', ') : value}`);
+    }
+    return originalSetHeader.call(this, name, value);
+  };
+  
+  next();
+});
+
 // Health check
 app.get("/health", (req, res) => {
   res.json({ status: "ok", message: "Server is running" });
+});
+
+// Cookie test endpoint for debugging
+app.get("/test-cookie", (req, res) => {
+  // Set a test cookie
+  res.cookie('testCookie', 'testValue', {
+    httpOnly: true,
+    sameSite: 'lax',
+    maxAge: 60000,
+    path: '/',
+    domain: 'localhost'
+  });
+  
+  res.json({ 
+    message: "Test cookie set",
+    receivedCookies: req.cookies,
+    headers: {
+      origin: req.headers.origin,
+      cookie: req.headers.cookie
+    }
+  });
 });
 
 // API routes
@@ -61,7 +100,7 @@ app.use((err, req, res, next) => {
 const startServer = async () => {
   try {
     await connectDB();
-    const PORT = process.env.PORT || 3001;
+    const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
       logger.info(`Server is running on port ${PORT}`);
     });
