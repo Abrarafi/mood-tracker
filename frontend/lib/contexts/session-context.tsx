@@ -25,68 +25,46 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   const checkSession = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      console.log(
-        "SessionContext: Token from localStorage:",
-        token ? "exists" : "not found"
-      );
+  try {
+    console.log("SessionContext: Checking session...");
 
-      if (!token) {
-        setUser(null);
-        setLoading(false);
-        return;
-      }
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
+      credentials: "include", // send cookies
+    });
 
-      console.log("SessionContext: Fetching user data...");
-      const response = await fetch("/api/auth/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    console.log("SessionContext: Response status:", response.status);
 
-      console.log("SessionContext: Response status:", response.status);
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("SessionContext: User data received:", data);
-        const userData = data.user;
-        const { password, ...safeUserData } = userData;
-        setUser(safeUserData);
-        console.log("SessionContext: User state updated:", safeUserData);
-      } else {
-        console.log("SessionContext: Failed to get user data");
-        setUser(null);
-        localStorage.removeItem("token");
-      }
-    } catch (error) {
-      console.error("SessionContext: Error checking session:", error);
+    if (response.ok) {
+      const data = await response.json();
+      console.log("SessionContext: User data received:", data);
+      const { password, ...safeUserData } = data.user;
+      setUser(safeUserData);
+    } else {
+      console.log("SessionContext: Session invalid");
       setUser(null);
-      localStorage.removeItem("token");
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (error) {
+    console.error("SessionContext: Error checking session:", error);
+    setUser(null);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const logout = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (token) {
-        await fetch("/api/auth/logout", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      }
-    } catch (error) {
-      console.error("Logout error:", error);
-    } finally {
-      localStorage.removeItem("token");
-      setUser(null);
-      router.push("/");
-    }
-  };
+  try {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+  } finally {
+    setUser(null);
+    router.push("/");
+  }
+};
+
 
   useEffect(() => {
     console.log("SessionContext: Initial check");
@@ -98,8 +76,8 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       value={{
         user,
         loading,
-        // isAuthenticated: !!user,
-        isAuthenticated: true, // --- IGNORE ---
+        isAuthenticated: !!user,
+        // isAuthenticated: true, // --- IGNORE ---
         logout,
         checkSession,
       }}

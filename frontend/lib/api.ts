@@ -1,5 +1,6 @@
 import axios from "axios";
 import { refreshToken } from "./auth";
+import router from "next/router";
 
 const api = axios.create({
   baseURL:
@@ -78,7 +79,8 @@ api.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null);
         if (shouldRedirectToLogin()) {
-          window.location.href = "/login";
+          // window.location.href = "/login";
+          router.push("/login");
         }
         return Promise.reject(refreshError);
       } finally {

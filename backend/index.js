@@ -21,7 +21,22 @@ dotenv.config();
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: true, credentials: true }));
+const allowedOrigins = [
+  "http://localhost:3000",               // local dev (Next.js)
+  "https://soulcare-ai-xwl3.vercel.app",    // replace with your actual Vercel domain
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // allow requests like Postman
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error("Not allowed by CORS"), false);
+    }
+  },
+  credentials: true, // allow cookies
+}));
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
